@@ -1,0 +1,14 @@
+.tools/
+.tmp/
+out/
+dist/
+*.class
+*.log
+*.tmp
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+hs_err_pid*
+*.jfr
