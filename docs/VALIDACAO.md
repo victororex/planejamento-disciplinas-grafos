@@ -5,11 +5,11 @@
 Validação realizada em **20/10/2026**, no Windows, com Eclipse Temurin JDK **17.0.20.1+1**, alvo Java 17 e codificação UTF-8. Não foram encontradas dependências externas no projeto.
 
 - `compilar.bat`: compilação concluída com `--release 17 -Xlint:all`, sem avisos.
-- `testar.bat`: **50 testes aprovados; 0 falhas**. Saída integral em [resultado-testes.txt](resultado-testes.txt).
+- `testar.bat`: **52 testes aprovados; 0 falhas**. Saída integral em [resultado-testes.txt](resultado-testes.txt).
 - `gerar-jar.bat`: JAR executável produzido em `dist/planejamento-disciplinas.jar` (artefato local de build, ignorado pelo Git).
 - Quatro exemplos `.pgd` gerados pelo próprio programa.
 
-Os 50 testes nomeados incluem verificações internas de 100 DAGs aleatórios, 40 grafos com classificação de ciclos conferida por alcançabilidade independente e uma cadeia com 10000 vértices. As sementes são fixas e a suíte retorna código de saída diferente de zero se houver falha.
+Os 52 testes nomeados incluem os casos K4 e K3 com vértice isolado da Aula 7, além de verificações internas de 100 DAGs aleatórios, 40 grafos com classificação de ciclos conferida por alcançabilidade independente e uma cadeia com 10000 vértices. As sementes são fixas e a suíte retorna código de saída diferente de zero se houver falha.
 
 ## Conferência da interface real
 
@@ -34,6 +34,12 @@ A aplicação foi aberta e inspecionada no desktop Windows. Foram observados cad
 As [capturas em `capturas/`](capturas/) foram obtidas da janela real em execução. Não são imagens geradas, desenhos de referência ou simulações da aparência. O documento não apresenta a inspeção visual como um teste automatizado completo de todos os cliques e combinações possíveis.
 
 Durante a conferência, foi aumentado o espaço reservado à execução e separada a tabela de estados da área de fila/pilha com divisor ajustável. A barra lateral também recebeu rolagem. Os campos acadêmicos permanecem distintos das etapas calculadas. A inspeção foi feita principalmente em uma janela de aproximadamente 1436 × 933 pixels; outras resoluções e escalas de DPI devem seguir o roteiro abaixo.
+
+## Revisão dos PDFs e do tema escuro
+
+Após o recebimento dos PDFs, a implementação foi confrontada com o enunciado e as Aulas 7, 8 e 9. O mapeamento de páginas, requisitos e classes está em [CONFERENCIA-PDFS.md](CONFERENCIA-PDFS.md). A comparação recebeu o critério explícito de facilidade de implementação; a contagem de componentes fracas passou a usar DFS iterativa. A suíte foi executada novamente e os **52 testes passaram**, incluindo os dois cenários da Aula 7.
+
+O tema escuro foi conferido na janela real executada a partir do JAR recompilado: grafo e setas, barra de seleção/conexão, formulário de disciplina, confirmação de alterações, seletor de arquivos, botões, tabela de estados, explicações HTML, comparação, colunas de períodos e alerta de ciclo. Kahn foi conferido no primeiro estado e ao final; a DFS foi conferida com vértices brancos, cinza e pretos. Os indicadores circulares preservam as cores literais da aula, além dos estados escritos na tabela. As capturas foram substituídas por imagens reais da interface escura; `tema-escuro.jpg` mostra a visão geral.
 
 ## Roteiro reproduzível para apresentação
 

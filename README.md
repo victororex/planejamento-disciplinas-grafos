@@ -2,6 +2,8 @@
 
 Aplicação acadêmica em **Java 17 e Swing**, sem dependências externas, para construir grafos direcionados de pré-requisitos, estudar Kahn e DFS passo a passo e planejar disciplinas que podem ser cursadas simultaneamente.
 
+A interface utiliza **tema escuro por padrão**, com a mesma paleta no grafo, nos formulários, seletores de arquivo, tabelas, planejamento e explicações. Os estados dos algoritmos preservam seus indicadores e destaques de seleção e ciclo.
+
 **A → B significa que A é pré-requisito de B.** A precisa ser concluída antes de B. A aplicação inicia vazia e permite criar, editar, analisar e salvar os próprios grafos.
 
 Repositório público: [victororex/planejamento-disciplinas-grafos](https://github.com/victororex/planejamento-disciplinas-grafos).
@@ -10,11 +12,11 @@ Repositório público: [victororex/planejamento-disciplinas-grafos](https://gith
 
 Interface Swing executada no Windows durante a validação. As imagens não são mockups.
 
-![Execução completa de Kahn, com graus e ordem produzida](docs/capturas/kahn.jpg)
+![Tema escuro com grafo interativo, estados e explicações](docs/capturas/tema-escuro.jpg)
 
 ![Ciclo real destacado e disciplinas apenas bloqueadas identificadas separadamente](docs/capturas/ciclo.jpg)
 
-Veja também a [DFS](docs/capturas/dfs.jpg), a [comparação das ordens válidas](docs/capturas/comparacao.jpg) e o [planejamento simultâneo](docs/capturas/periodos.jpg).
+Veja também [Kahn completo](docs/capturas/kahn.jpg), a [DFS](docs/capturas/dfs.jpg), a [comparação das ordens válidas](docs/capturas/comparacao.jpg) e o [planejamento simultâneo](docs/capturas/periodos.jpg).
 
 ## Executar no Windows
 
@@ -77,7 +79,7 @@ O JAR precisa de Java 17 ou superior. Não é necessário Maven, Gradle, banco d
 Clique em **Executar Kahn**, **Executar DFS** ou escolha o algoritmo e use **Iniciar**. A execução abre no primeiro estado. Use **Próximo**, **Anterior**, **Até o final** e **Reiniciar visualização**. Os estados são cópias imutáveis; voltar não modifica o grafo nem executa operações inversas artificiais.
 
 - **Kahn:** mostra graus residuais, fila FIFO, vértice processado, aresta atualizada e ordem parcial. Cartões amarelos estão na fila; verdes foram processados. O cadastro e suas arestas permanecem intactos.
-- **DFS:** mostra branco (não visitado), cinza (ativo) e preto (finalizado), pilha/caminho ativo, aresta explorada, lista de finalização e a ordem invertida no fim. A pilha é exibida da base para o topo. Quadros explícitos simulam as chamadas recursivas.
+- **DFS:** mostra branco (não visitado), cinza (ativo) e preto (finalizado), pilha/caminho ativo, aresta explorada, lista de finalização e a ordem invertida no fim. Indicadores circulares preservam literalmente essas três cores nos cartões escuros, além dos estados escritos na tabela. A pilha é exibida da base para o topo. Quadros explícitos simulam as chamadas recursivas.
 - **Modo de estudo:** explica o que acontece, a escolha do vértice, a regra matemática, a mudança e o próximo passo usando os códigos, nomes e valores do grafo atual. Pode ser desativado.
 
 O processamento e a leitura/escrita de arquivos ocorrem em `SwingWorker`. Alterações matemáticas invalidam análises anteriores. Durante uma operação, os controles de edição são desativados. O histórico completo é oferecido quando a estimativa `3V + E + 2` não ultrapassa 2000 estados nem 120000 células de estado; acima disso, os resultados finais continuam disponíveis sem histórico para limitar memória. Não há reprodução automática por temporizador: **Até o final** avança diretamente ao resultado.
@@ -139,7 +141,7 @@ LICENSE                 Licença MIT
 | Classes | Responsabilidade |
 |---|---|
 | `Disciplina` | Cadastro imutável e validações de código, nome e período |
-| `GrafoDisciplinas` | Lista de adjacência, CRUD, pré-requisitos derivados, graus, cópias e componentes fracas |
+| `GrafoDisciplinas` | Lista de adjacência, CRUD, pré-requisitos derivados, graus, cópias e componentes fracas por DFS |
 | `AlgoritmoKahn`, `AlgoritmoDFS` | Implementações manuais, com observador opcional de passos |
 | `ResultadoOrdenacao`, `PassoAlgoritmo` | Resultados e estados imutáveis |
 | `DetectorCiclos` | Ciclo testemunha da DFS e classificação de participantes por Kosaraju |
@@ -171,12 +173,19 @@ Guardar T fotografias completas custa O(T·V), além dos textos. Histórico, ren
 
 ## Testes e relatório
 
-Foram executados **50 testes, com 0 falhas**, no JDK Temurin 17.0.20.1. A suíte inclui os 20 tópicos obrigatórios, entradas inválidas, edição de códigos, classificação de múltiplos ciclos, imutabilidade dos estados, geometria das extremidades, 100 DAGs aleatórios, 40 grafos com conferência independente por alcançabilidade e uma cadeia de 10000 vértices. São 50 casos nomeados; as amostras aleatórias são verificações internas, não 140 casos extras na contagem.
+Foram executados **52 testes, com 0 falhas**, no JDK Temurin 17.0.20.1. A suíte inclui os 20 tópicos obrigatórios, os exemplos K4 e K3 com vértice isolado da Aula 7, entradas inválidas, edição de códigos, classificação de múltiplos ciclos, imutabilidade dos estados, geometria das extremidades, 100 DAGs aleatórios, 40 grafos com conferência independente por alcançabilidade e uma cadeia de 10000 vértices. São 52 casos nomeados; as amostras aleatórias são verificações internas, não 140 casos extras na contagem.
 
 Consulte a [saída real](docs/resultado-testes.txt), as [evidências e o roteiro da interface](docs/VALIDACAO.md), o [relatório acadêmico](docs/RELATORIO.md) e as [instruções de publicação](docs/PUBLICACAO.md).
 
 ## Referências acadêmicas e licença
 
-Enunciado e tópicos indicados pela professora **Silvia Brandão**: Projeto Prático 1 — Algoritmos em Grafos; Aula 7 — Contagem de Componentes Conexos; Aula 8 — Ordenação Topológica; Aula 9 — Detecção de Ciclos. Os PDFs não estavam disponíveis no workspace; a implementação e o relatório se baseiam nos requisitos textuais fornecidos. Não se afirma revisão direta dos PDFs, e nenhum material da professora é redistribuído.
+Materiais da professora **Silvia Brandão** lidos e conferidos diretamente nos PDFs fornecidos:
+
+- Projeto Prático 1 — Algoritmos em Grafos, pp. 1–4: modelagem, cadastro, Kahn, DFS, ciclos, análise, comparação e demonstração.
+- Aula 7 — Contagem de Componentes Conexos, pp. 3–7: DFS em grafos não direcionados; a aplicação utiliza uma projeção não direcionada para contar componentes fracas do dígrafo.
+- Aula 8 — Ordenação Topológica, pp. 4, 8–9: precedência, fontes, fila, atualização dos graus e O(V + E).
+- Aula 9 — Detecção de Ciclos, pp. 10–15: três estados, pilha ativa, aresta para cinza e inversão da finalização.
+
+A [conferência dos requisitos](docs/CONFERENCIA-PDFS.md) relaciona cada tópico à implementação. Os PDFs e seus dados de contato não são redistribuídos no repositório.
 
 Código sob a [licença MIT](LICENSE). A identificação da licença foi obtida do perfil autenticado do GitHub. Nenhum nome, RA ou identificação de aluno foi acrescentado ao relatório acadêmico.

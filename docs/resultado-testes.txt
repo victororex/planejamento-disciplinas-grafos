@@ -28,6 +28,8 @@ Compilacao concluida.
 [OK] Planejamento considera o pré-requisito mais tardio
 [OK] Planejamento rejeita ciclos
 [OK] Várias componentes fracas e isolada
+[OK] Aula 7: K4 tem uma componente fraca
+[OK] Aula 7: K3 e vértice isolado têm duas componentes
 [OK] Preservação do grafo em todas as análises
 [OK] Histórico Kahn reflete graus, fila e ordem reais
 [OK] Histórico DFS tem pilha, cores e finalização coerentes
@@ -50,4 +52,4 @@ Compilacao concluida.
 [OK] 40 grafos cíclicos aleatórios: classificação forte confere com alcançabilidade independente
 [OK] Cadeia de 10000 vértices sem estouro de pilha
 
-RESULTADO: 50 testes aprovados; 0 falhas.
+RESULTADO: 52 testes aprovados; 0 falhas.

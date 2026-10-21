@@ -12,19 +12,19 @@ O modelo é um grafo G = (V, E), no qual cada vértice representa uma disciplina
 
 A representação utiliza um mapa de listas de adjacência, implementadas com conjuntos para impedir arestas repetidas. A ordem de inserção é preservada para tornar os resultados reprodutíveis. Código, nome e período de referência pertencem ao cadastro. Os pré-requisitos são derivados das arestas de entrada, evitando armazenar a mesma informação em duas estruturas mutáveis. As posições dos cartões pertencem a uma estrutura visual separada e não influenciam os algoritmos.
 
-O período cadastrado descreve uma referência acadêmica. A etapa recomendada é calculada pelas dependências e pode ser diferente. Um conjunto de componentes fracamente conexas, obtido ignorando temporariamente a direção na contagem, pode ser ordenado normalmente quando não possui ciclos direcionados.
+O período cadastrado descreve uma referência acadêmica. A etapa recomendada é calculada pelas dependências e pode ser diferente. Para contar componentes fracas, uma DFS percorre uma projeção não direcionada, iniciando uma nova busca em cada vértice ainda não visitado, conforme a lógica da Aula 7 (pp. 3–6). Essa projeção não altera as arestas do modelo original. Componentes separadas podem ser ordenadas normalmente quando não há ciclos direcionados.
 
 ## 3. Algoritmo de Kahn
 
 Kahn calcula os graus de entrada e coloca os vértices de grau zero em uma fila FIFO. A cada retirada, acrescenta o vértice à ordem parcial e reduz o grau residual de cada sucessor. Um sucessor entra na fila quando seu grau chega a zero. A regra garante que uma disciplina só seja processada depois de todos os seus pré-requisitos.
 
-O programa preserva o grafo e altera apenas uma cópia dos graus. No exemplo acadêmico com A → B, A → C, B → D e C → E, a fila começa com A. Ao processá-la, B e C tornam-se elegíveis. O resultado produzido foi **A → B → C → D → E**.
+O programa preserva o grafo e altera apenas uma cópia dos graus. Isso representa a remoção lógica das arestas descrita na Aula 8 (p. 8), mantendo as relações disponíveis para novas análises. No exemplo acadêmico com A → B, A → C, B → D e C → E, a fila começa com A. Ao processá-la, B e C tornam-se elegíveis. O resultado produzido foi **A → B → C → D → E**, como no enunciado do projeto (p. 2).
 
 Se a fila esvazia antes de processar |V| vértices, o grafo possui um ciclo. A ordem parcial permanece apenas como estado de estudo e não é aceita como solução completa.
 
 ## 4. Algoritmo DFS
 
-A DFS usa três estados: branco para não visitado, cinza para ativo e preto para finalizado. Ao entrar em um vértice, marca-o como cinza e explora seus sucessores. Depois de examinar todos eles, marca o vértice como preto e registra sua finalização. Em um grafo acíclico, inverter a finalização produz uma ordenação topológica.
+A DFS usa três estados: branco para não visitado, cinza para ativo e preto para finalizado, conforme a Aula 9 (p. 10). Ao entrar em um vértice, marca-o como cinza e explora seus sucessores. Depois de examinar todos eles, marca o vértice como preto e registra sua finalização. Em um grafo acíclico, inverter a finalização produz uma ordenação topológica, como no código apresentado na Aula 9 (p. 15).
 
 A implementação usa uma pilha explícita de quadros com vértice e iterador de sucessores. Ela reproduz a organização das chamadas recursivas e permite percorrer cadeias profundas sem depender do limite da pilha de chamadas da JVM. O caminho ativo é mostrado na interface.
 
@@ -70,6 +70,7 @@ Guardar T fotografias para navegação didática tem custo adicional O(T·V), al
 | Estruturas | Graus e fila | Cores, pilha e finalização |
 | Construção da ordem | Na retirada da fila | Inversão da finalização |
 | Evidência de ciclo | Menos de V processados | Aresta para ancestral cinza |
+| Facilidade de implementação | Iteração direta com fila e graus residuais | Exige coordenar cores, pilha ativa e inversão da finalização |
 | Vantagem | Evidencia disciplinas elegíveis | Reconstrói um caminho circular |
 | Limitação | Resíduo não identifica sozinho os participantes | Finalização é inválida como solução quando há ciclo |
 | Aplicações | Escalonamento e dependências de compilação | Análise de fluxos e dependências |
@@ -78,9 +79,9 @@ As duas ordens obtidas no exemplo 1 são diferentes e corretas. Um verificador i
 
 ## 9. Resultados dos testes
 
-A suíte foi executada em 20 de outubro de 2026 com JDK Eclipse Temurin 17.0.20.1, compilação UTF-8 e alvo Java 17. Foram executados **50 casos nomeados, com 50 aprovações e nenhuma falha**. A saída integral está em `resultado-testes.txt`.
+A suíte foi executada em 20 de outubro de 2026 com JDK Eclipse Temurin 17.0.20.1, compilação UTF-8 e alvo Java 17. Foram executados **52 casos nomeados, com 52 aprovações e nenhuma falha**. A saída integral está em `resultado-testes.txt`.
 
-Os casos abrangem cadastro, validações, edição, remoção, grafos vazios, isoladas, DAGs, ciclos de dois e três vértices, múltiplas componentes, verificador independente, planejamento, preservação do grafo, consistência de históricos, geometria e persistência válida e inválida. Dentro de três casos de maior abrangência foram examinados 100 DAGs aleatórios, 40 grafos cuja classificação de ciclos foi comparada com alcançabilidade independente e uma cadeia com 10000 vértices. Essas amostras não são contadas como testes nomeados adicionais.
+Os casos abrangem cadastro, validações, edição, remoção, grafos vazios, isoladas, DAGs, ciclos de dois e três vértices, múltiplas componentes, verificador independente, planejamento, preservação do grafo, consistência de históricos, geometria e persistência válida e inválida. Os exercícios da Aula 7 (p. 7) foram usados como testes adicionais: a projeção K4 produziu uma componente, e a projeção K3 com um vértice isolado produziu duas. Dentro de três casos de maior abrangência foram examinados 100 DAGs aleatórios, 40 grafos cuja classificação de ciclos foi comparada com alcançabilidade independente e uma cadeia com 10000 vértices. Essas amostras não são contadas como testes nomeados adicionais.
 
 O gerador aleatório usa sementes fixas. O cenário com ciclo e uma disciplina bloqueada confirmou a diferença entre participar da circularidade e sofrer suas consequências. O salvamento e a leitura preservaram caracteres acentuados, períodos, posições e relações. Arquivos malformados foram rejeitados.
 
@@ -96,4 +97,6 @@ Uma aplicação profissional precisa combinar esse planejamento lógico com dura
 
 O sistema implementa duas estratégias manuais de ordenação topológica, verificação independente, reconstrução de ciclos e planejamento por camadas. A separação entre cadastro, grafo, posições e estados de execução facilita a compreensão do código e evita que a simulação modifique as dependências originais. Os resultados dos testes sustentam a correção lógica nos cenários examinados, e o modo de estudo permite observar as regras aplicadas a cada estado.
 
-O trabalho se baseia nos requisitos textuais fornecidos para o Projeto Prático 1 e nos tópicos indicados das Aulas 7, 8 e 9 da professora Silvia Brandão. Os PDFs não estavam disponíveis para leitura direta e não integram a distribuição.
+O trabalho foi conferido diretamente com o PDF do Projeto Prático 1 (pp. 1–4) e com as Aulas 7, 8 e 9 da professora Silvia Brandão. A comparação contempla os critérios de estratégia, estruturas auxiliares, ciclos, facilidade de implementação e aplicações exigidos no enunciado (p. 3). A interface usa tema escuro, preservando a distinção visual e textual dos estados. Os materiais originais não integram a distribuição.
+
+Materiais consultados: BRANDÃO, Silvia. *Projeto Prático 1 — Algoritmos em Grafos*, 2026.2, 4 p.; *Aula 7 — Contagem de Componentes Conexos*, 7 p.; *Aula 8 — Ordenação Topológica*, 11 p.; *Aula 9 — Detecção de Ciclos*, 17 p. PDFs fornecidos pelo estudante; consulta em 20 out. 2026.

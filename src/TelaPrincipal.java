@@ -86,7 +86,7 @@ public final class TelaPrincipal extends JFrame implements PainelGrafo.Acoes {
     }
     private JPanel areaGrafo() {
         JPanel p=new JPanel(new BorderLayout());p.setMinimumSize(new Dimension(370,220));
-        JToolBar barra=new JToolBar();barra.setFloatable(false);barra.setBackground(Color.WHITE);barra.setBorder(Tema.margem(7));
+        JToolBar barra=new JToolBar();barra.setFloatable(false);barra.setBackground(Tema.SUPERFICIE);barra.setBorder(Tema.margem(7));
         ButtonGroup grupo=new ButtonGroup();
         String[] nomes={"Selecionar","Criar","Conectar"};
         for(int i=0;i<nomes.length;i++){
@@ -112,7 +112,7 @@ public final class TelaPrincipal extends JFrame implements PainelGrafo.Acoes {
         lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);lista.setFixedCellHeight(38);
         lista.setCellRenderer((l,d,i,s,f)->{
             JLabel label=new JLabel("<html><b>"+ExplicadorDidatico.html(d.getCodigo())+"</b>  "+ExplicadorDidatico.html(d.getNome())+"</html>");
-            label.setOpaque(true);label.setBackground(s?new Color(222,241,238):Color.WHITE);label.setForeground(Tema.TINTA);label.setBorder(Tema.margem(5));return label;
+            label.setOpaque(true);label.setBackground(s?Tema.SELECAO:Tema.SUPERFICIE);label.setForeground(Tema.TINTA);label.setBorder(Tema.margem(5));return label;
         });
         lista.addListSelectionListener(e->{if(!e.getValueIsAdjusting()&&lista.getSelectedValue()!=null)painelGrafo.selecionar(lista.getSelectedValue().getCodigo());});
         lista.addMouseListener(new MouseAdapter(){@Override public void mouseClicked(MouseEvent e){if(!ocupado&&e.getClickCount()==2&&lista.getSelectedValue()!=null)editar(lista.getSelectedValue().getCodigo());}});
@@ -128,7 +128,7 @@ public final class TelaPrincipal extends JFrame implements PainelGrafo.Acoes {
         barra.add(acao("Planejar períodos",()->analisar("Períodos")));
         estudo.setOpaque(false);estudo.addActionListener(e->{if(indice>=0)mostrarPasso();});barra.add(estudo);p.add(barra,BorderLayout.NORTH);
         abas.addTab("Execução e estudo",areaExecucao());abas.addTab("Comparação",new JScrollPane(comparacao));
-        periodos.setLayout(new BoxLayout(periodos,BoxLayout.X_AXIS));periodos.setBackground(Color.WHITE);
+        periodos.setLayout(new BoxLayout(periodos,BoxLayout.X_AXIS));periodos.setBackground(Tema.SUPERFICIE);
         JScrollPane sp=new JScrollPane(periodos);sp.getHorizontalScrollBar().setUnitIncrement(30);abas.addTab("Períodos recomendados",sp);
         JEditorPane teoria=editor();teoria.setText(ExplicadorDidatico.complexidade());teoria.setCaretPosition(0);abas.addTab("Complexidade",new JScrollPane(teoria));
         JEditorPane glossario=editor();glossario.setText(ExplicadorDidatico.glossario());glossario.setCaretPosition(0);abas.addTab("Glossário",new JScrollPane(glossario));
@@ -149,7 +149,7 @@ public final class TelaPrincipal extends JFrame implements PainelGrafo.Acoes {
         JSplitPane divisor=divisor(JSplitPane.HORIZONTAL_SPLIT,new JScrollPane(explicacao),estado,.58);divisor.setDividerLocation(730);p.add(divisor,BorderLayout.CENTER);return p;
     }
     private JEditorPane editor() {
-        JEditorPane e=new JEditorPane("text/html","");e.setEditable(false);e.setBackground(Color.WHITE);e.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES,true);return e;
+        JEditorPane e=new JEditorPane("text/html","");e.setEditable(false);e.setBackground(Tema.SUPERFICIE);e.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES,true);return e;
     }
     private JSplitPane divisor(int sentido,Component a,Component b,double peso) {
         JSplitPane s=new JSplitPane(sentido,a,b);s.setResizeWeight(peso);s.setBorder(null);s.setContinuousLayout(true);return s;
@@ -335,6 +335,7 @@ public final class TelaPrincipal extends JFrame implements PainelGrafo.Acoes {
     private void preencherComparacao(){
         var c=ultimaAnalise;StringBuilder s=new StringBuilder("<h2>Comparação no grafo atual</h2><table width='100%'><tr><th>Aspecto</th><th>Kahn</th><th>DFS</th></tr>");
         linha(s,"Estratégia","Graus de entrada + fila FIFO","Profundidade + pilha e três cores");
+        linha(s,"Facilidade de implementação","Iteração direta com fila e graus residuais","Controle de cores, pilha e inversão da finalização");
         linha(s,"Ordenação",c.kahn().possuiCiclo()?"Indisponível (ciclo)":ExplicadorDidatico.ordem(c.kahn().ordem()),c.dfs().possuiCiclo()?"Indisponível (ciclo)":ExplicadorDidatico.ordem(c.dfs().ordem()));
         linha(s,"Verificação independente",c.kahnValida()?"Válida":"Não há ordem válida",c.dfsValida()?"Válida":"Não há ordem válida");
         linha(s,"Vértices processados",c.kahn().processados().size()+" / "+grafo.quantidadeVertices(),c.dfs().processados().size()+" visitados / "+grafo.quantidadeVertices());
@@ -353,8 +354,8 @@ public final class TelaPrincipal extends JFrame implements PainelGrafo.Acoes {
         else if(p.grupos().isEmpty())periodos.add(new JLabel("   O grafo está vazio. Cadastre disciplinas para planejar."));
         else{
             for(int i=0;i<p.grupos().size();i++){
-                JPanel coluna=new JPanel(new BorderLayout());coluna.setBackground(Color.WHITE);coluna.setBorder(new CompoundBorder(Tema.margem(10),new LineBorder(Tema.LINHA,1,true)));
-                JLabel titulo=new JLabel("  ETAPA RECOMENDADA "+(i+1));titulo.setOpaque(true);titulo.setBackground(new Color(226,241,238));titulo.setForeground(Tema.VERDE);titulo.setBorder(Tema.margem(10));titulo.setFont(new Font("Segoe UI",Font.BOLD,12));coluna.add(titulo,BorderLayout.NORTH);
+                JPanel coluna=new JPanel(new BorderLayout());coluna.setBackground(Tema.SUPERFICIE);coluna.setBorder(new CompoundBorder(Tema.margem(10),new LineBorder(Tema.LINHA,1,true)));
+                JLabel titulo=new JLabel("  ETAPA RECOMENDADA "+(i+1));titulo.setOpaque(true);titulo.setBackground(Tema.SELECAO);titulo.setForeground(Tema.VERDE);titulo.setBorder(Tema.margem(10));titulo.setFont(new Font("Segoe UI",Font.BOLD,12));coluna.add(titulo,BorderLayout.NORTH);
                 JEditorPane texto=editor();StringBuilder h=new StringBuilder();
                 for(String c:p.grupos().get(i)){
                     Disciplina d=grafo.obterDisciplina(c);h.append("<p><b>").append(ExplicadorDidatico.html(d.toString())).append("</b><br><span class='suave'>Período cadastrado: ").append(d.getPeriodoReferencia()).append("<br>Pré-requisitos: ").append(grafo.obterPrerequisitos(c).isEmpty()?"nenhum":ExplicadorDidatico.html(String.join(", ",grafo.obterPrerequisitos(c)))).append("</span></p>");

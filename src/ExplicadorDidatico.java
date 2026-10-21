@@ -7,10 +7,11 @@ public final class ExplicadorDidatico {
     }
     public static String ordem(Collection<String> itens) { return itens.isEmpty() ? "∅" : String.join(" → ",itens); }
     public static String documento(String conteudo) {
-        return "<html><head><style>body{font-family:Segoe UI,sans-serif;font-size:12px;color:#25354a;margin:12px;}"
-                + "h2{font-size:17px;color:#173e52;}h3{font-size:13px;color:#176b68;}p{margin:7px 0;}"
-                + "td,th{padding:7px;text-align:left;}th{background:#e6efef;}table{border:1px solid #d7e0e5;}"
-                + ".alerta{color:#b13c40;} .suave{color:#617186;}</style></head><body>" + conteudo + "</body></html>";
+        return "<html><head><style>body{font-family:Segoe UI,sans-serif;font-size:12px;color:"+Tema.hex(Tema.TINTA)
+                +";background-color:"+Tema.hex(Tema.SUPERFICIE)+";margin:12px;}"
+                + "h2{font-size:17px;color:"+Tema.hex(Tema.TINTA)+";}h3{font-size:13px;color:"+Tema.hex(Tema.VERDE)+";}p{margin:7px 0;}"
+                + "td,th{padding:7px;text-align:left;}th{background:"+Tema.hex(Tema.CONTROLE)+";}table{border:1px solid "+Tema.hex(Tema.LINHA)+";}"
+                + ".alerta{color:"+Tema.hex(Tema.VERMELHO)+";} .suave{color:"+Tema.hex(Tema.SUAVE)+";}</style></head><body>" + conteudo + "</body></html>";
     }
     public static String passo(PassoAlgoritmo p, int indice, int total, boolean estudo) {
         String base = "<h2>"+p.algoritmo()+" · passo "+(indice+1)+" de "+total+"</h2><p><b>"+html(p.evento())+"</b> — "+html(p.acontecendo())+"</p>";
@@ -26,6 +27,7 @@ public final class ExplicadorDidatico {
                 +"<p>O planejamento propaga etapa(w) = máximo(etapa(w), etapa(v) + 1) em ordem topológica, também em O(V + E). A classificação de ciclos usa uma segunda passagem DFS no grafo transposto (Kosaraju), O(V + E).</p>"
                 +"<table><tr><th>Aspecto</th><th>Kahn</th><th>DFS</th></tr><tr><td>Estrutura</td><td>Fila + graus</td><td>Pilha + três cores</td></tr>"
                 +"<tr><td>Vantagem</td><td>Expõe disciplinas elegíveis</td><td>Reconstrói ciclo por ancestral cinza</td></tr><tr><td>Limitação</td><td>Resíduo não identifica sozinho o ciclo</td><td>Finalização precisa ser invertida; com ciclo é inválida</td></tr>"
+                +"<tr><td>Facilidade de implementação</td><td>Iteração direta com fila e graus residuais</td><td>Exige controlar cores, pilha e finalização</td></tr>"
                 +"<tr><td>Aplicações</td><td>Oferta de disciplinas, tarefas de compilação</td><td>Análise de dependências, inspeção de fluxos</td></tr></table>"
                 +"<h3>O custo da visualização é separado</h3><p>Copiar todos os estados para T passos custa O(T·V) e textos adicionais. A animação e o desenho não fazem parte da complexidade teórica do algoritmo. O histórico didático é limitado a entradas com estimativa de até 2000 passos e 120000 células de estado; grafos maiores oferecem análise final sem histórico.</p>");
     }
@@ -40,6 +42,6 @@ public final class ExplicadorDidatico {
                 +"<p><b>Dependência circular:</b> caminho direcionado que retorna à disciplina de origem.</p>"
                 +"<p><b>Complexidade O(V + E):</b> trabalho proporcional ao total de vértices e arestas.</p>"
                 +"<p><b>Período cadastrado:</b> informação acadêmica editável. <b>Etapa recomendada:</b> calculada exclusivamente pelas dependências.</p>"
-                +"<p><b>Componente fraca:</b> grupo conectado ao ignorar a direção apenas para essa contagem. Grupos separados e vértices isolados não impedem uma ordenação topológica.</p>");
+                +"<p><b>Componente fraca:</b> grupo conectado ao ignorar a direção apenas para essa contagem. Uma DFS é iniciada em cada vértice ainda não visitado, como na Aula 7. A lista original continua direcionada. Grupos separados e vértices isolados não impedem uma ordenação topológica.</p>");
     }
 }

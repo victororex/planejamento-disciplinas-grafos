@@ -83,7 +83,7 @@ public final class GrafoDisciplinas {
         return g;
     }
 
-    /** Componentes FRACAMENTE conexas: ignora a direção apenas nesta análise educativa. */
+    /** DFS da Aula 7 numa visão não direcionada: componentes FRACAMENTE conexas do dígrafo. */
     public List<Set<String>> componentesFracas() {
         Map<String, Set<String>> naoDirecionado = new LinkedHashMap<>();
         disciplinas.keySet().forEach(c -> naoDirecionado.put(c, new LinkedHashSet<>()));
@@ -95,10 +95,10 @@ public final class GrafoDisciplinas {
         for (String c : disciplinas.keySet()) {
             if (!vistos.add(c)) continue;
             Set<String> grupo = new LinkedHashSet<>();
-            Deque<String> fila = new ArrayDeque<>(); fila.add(c);
-            while (!fila.isEmpty()) {
-                String v = fila.remove(); grupo.add(v);
-                for (String w : naoDirecionado.get(v)) if (vistos.add(w)) fila.add(w);
+            Deque<String> pilha = new ArrayDeque<>(); pilha.push(c);
+            while (!pilha.isEmpty()) {
+                String v = pilha.pop(); grupo.add(v);
+                for (String w : naoDirecionado.get(v)) if (vistos.add(w)) pilha.push(w);
             }
             grupos.add(Collections.unmodifiableSet(grupo));
         }

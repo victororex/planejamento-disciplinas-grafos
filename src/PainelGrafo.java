@@ -33,7 +33,7 @@ public final class PainelGrafo extends JPanel {
 
     public PainelGrafo(GrafoDisciplinas g, Map<String, VerticeVisual> p, Acoes acoes) {
         this.grafo=g; this.posicoes=p; this.acoes=acoes;
-        setBackground(Color.WHITE); setFocusable(true);
+        setBackground(Tema.CAMPO); setFocusable(true);
         ToolTipManager.sharedInstance().registerComponent(this);
         MouseAdapter mouse = new MouseAdapter() {
             @Override public void mousePressed(MouseEvent e) {
@@ -139,7 +139,7 @@ public final class PainelGrafo extends JPanel {
         Graphics2D g=(Graphics2D)graphics.create();g.scale(zoom,zoom);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g.setColor(new Color(229,236,242));
+        g.setColor(Tema.GRADE);
         Rectangle clip=g.getClipBounds();
         for(int x=Math.max(0,(clip.x/28)*28);x<clip.x+clip.width;x+=28)
             for(int y=Math.max(0,(clip.y/28)*28);y<clip.y+clip.height;y+=28)g.fillOval(x,y,2,2);
@@ -147,7 +147,7 @@ public final class PainelGrafo extends JPanel {
         adj.forEach((a,vs)->vs.forEach(b->desenharAresta(g,a,b,adj.get(b).contains(a))));
         for(Disciplina d:grafo.getDisciplinas())desenharVertice(g,d);
         if(grafo.quantidadeVertices()==0){
-            g.setColor(Tema.AZUL);g.setFont(new Font("Segoe UI",Font.BOLD,24));g.drawString("Construa seu planejamento",100,140);
+            g.setColor(Tema.TINTA);g.setFont(new Font("Segoe UI",Font.BOLD,24));g.drawString("Construa seu planejamento",100,140);
             g.setColor(Tema.SUAVE);g.setFont(new Font("Segoe UI",Font.PLAIN,14));
             g.drawString("Escolha Criar e clique aqui para cadastrar uma disciplina.",100,178);
             g.drawString("Depois, conecte o pré-requisito à disciplina dependente.",100,204);
@@ -167,7 +167,7 @@ public final class PainelGrafo extends JPanel {
         Point2D inicio=borda(p,reciproca?cx:q.getX(),reciproca?cy:q.getY());
         Point2D fim=borda(q,reciproca?cx:p.getX(),reciproca?cy:p.getY());
         boolean ativa=passo!=null&&a.equals(passo.origem())&&b.equals(passo.destino());
-        g.setColor(arestaCiclo(a,b)?Tema.VERMELHO:ativa?Tema.VERDE:new Color(135,155,172));
+        g.setColor(arestaCiclo(a,b)?Tema.VERMELHO:ativa?Tema.VERDE:Tema.ARESTA);
         g.setStroke(new BasicStroke(arestaCiclo(a,b)||ativa?3:1.8f,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
         if(reciproca)g.draw(new QuadCurve2D.Double(inicio.getX(),inicio.getY(),cx,cy,fim.getX(),fim.getY()));
         else g.draw(new Line2D.Double(inicio,fim));
@@ -179,20 +179,28 @@ public final class PainelGrafo extends JPanel {
     private void desenharVertice(Graphics2D g,Disciplina d) {
         String c=d.getCodigo();VerticeVisual p=posicoes.get(c);Shape forma=forma(p);
         boolean emCiclo=ciclo.contains(c),selecionada=c.equals(selecionado)||c.equals(origemConexao);
-        Color fundo=Color.WHITE,borda=Tema.LINHA,texto=Tema.TINTA;
+        Color fundo=Tema.CARTAO,borda=Tema.LINHA,texto=Tema.TINTA;
+        PassoAlgoritmo.Cor estadoDfs=null;
         if(passo!=null){
             if(passo.algoritmo().equals("DFS")){
                 PassoAlgoritmo.Cor cor=passo.cores().get(c);
-                if(cor==PassoAlgoritmo.Cor.CINZA){fundo=new Color(221,229,239);borda=new Color(102,119,142);}
-                if(cor==PassoAlgoritmo.Cor.PRETO){fundo=Tema.AZUL;borda=Tema.AZUL;texto=Color.WHITE;}
-            }else if(processados.contains(c)){fundo=new Color(224,242,236);borda=Tema.VERDE;}
-            else if(passo.fila().contains(c)){fundo=new Color(255,246,218);borda=new Color(193,145,42);}
+                estadoDfs=cor;
+                if(cor==PassoAlgoritmo.Cor.BRANCO)borda=Tema.SUAVE;
+                if(cor==PassoAlgoritmo.Cor.CINZA){fundo=Tema.CINZA;borda=Tema.SUAVE;}
+                if(cor==PassoAlgoritmo.Cor.PRETO){fundo=Tema.PRETO;borda=Tema.SUAVE;}
+            }else if(processados.contains(c)){fundo=Tema.FUNDO_PROCESSADO;borda=Tema.VERDE;}
+            else if(passo.fila().contains(c)){fundo=Tema.FUNDO_FILA;borda=Tema.AMARELO;}
         }
-        if(emCiclo){fundo=new Color(255,231,233);borda=Tema.VERMELHO;texto=Tema.VERMELHO;}
-        if(selecionada){g.setColor(new Color(177,220,221));g.setStroke(new BasicStroke(7));g.draw(forma);}
+        if(emCiclo){fundo=Tema.FUNDO_CICLO;borda=Tema.VERMELHO;texto=Tema.VERMELHO;}
+        if(selecionada){g.setColor(Tema.HALO);g.setStroke(new BasicStroke(7));g.draw(forma);}
         g.setColor(fundo);g.fill(forma);g.setColor(selecionada?Tema.VERDE:borda);g.setStroke(new BasicStroke(2));g.draw(forma);
         int x=(int)(p.getX()-LARGURA/2+13),y=(int)(p.getY()-ALTURA/2);
-        g.setColor(texto);g.setFont(new Font("Segoe UI",Font.BOLD,15));g.drawString(c,x,y+23);
+        if(estadoDfs!=null){
+            // Indicador literal das três cores, além do estado escrito na tabela.
+            g.setColor(switch(estadoDfs){case BRANCO->Color.WHITE;case CINZA->Color.GRAY;case PRETO->Color.BLACK;});
+            g.fillOval(x,y+13,8,8);g.setColor(Tema.TINTA);g.setStroke(new BasicStroke(1));g.drawOval(x,y+13,8,8);
+        }
+        g.setColor(texto);g.setFont(new Font("Segoe UI",Font.BOLD,15));g.drawString(c,x+(estadoDfs==null?0:14),y+23);
         g.setFont(new Font("Segoe UI",Font.PLAIN,10));
         String periodo="cad. "+d.getPeriodoReferencia();
         g.drawString(periodo,(int)(p.getX()+LARGURA/2-12-g.getFontMetrics().stringWidth(periodo)),y+22);
@@ -204,7 +212,7 @@ public final class PainelGrafo extends JPanel {
         if(etapas.containsKey(c))extra="Etapa recomendada "+etapas.get(c);
         if(!extra.isEmpty()){
             g.setFont(new Font("Segoe UI",Font.BOLD,11));g.setColor(Tema.VERDE);int w=g.getFontMetrics().stringWidth(extra);
-            g.setColor(Color.WHITE);g.fillRoundRect((int)p.getX()-w/2-6,y-23,w+12,18,8,8);
+            g.setColor(Tema.SUPERFICIE);g.fillRoundRect((int)p.getX()-w/2-6,y-23,w+12,18,8,8);
             g.setColor(Tema.VERDE);g.drawString(extra,(int)p.getX()-w/2,y-10);
         }
     }

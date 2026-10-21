@@ -94,6 +94,16 @@ public final class TestesAlgoritmos {
         teste("Várias componentes fracas e isolada",()->{
             GrafoDisciplinas g=ExemplosAcademicos.criar(3).grafo();igual(3,g.componentesFracas().size());validarDAG(g);
         });
+        teste("Aula 7: K4 tem uma componente fraca",()->{
+            GrafoDisciplinas g=vertices("0","1","2","3");ligar(g,"0","1","0","2","0","3","1","2","1","3","2","3");
+            igual(List.of(Set.of("0","1","2","3")),g.componentesFracas());
+            // A projeção ignora a direção sem acrescentar arestas reversas ao modelo.
+            verifica(!g.existeDependencia("1","0"));igual(6,g.quantidadeArestas());
+        });
+        teste("Aula 7: K3 e vértice isolado têm duas componentes",()->{
+            GrafoDisciplinas g=vertices("0","1","2","3");ligar(g,"0","1","0","2","1","2");
+            igual(List.of(Set.of("0","1","2"),Set.of("3")),g.componentesFracas());validarDAG(g);
+        });
         teste("Preservação do grafo em todas as análises",()->{
             GrafoDisciplinas g=ExemplosAcademicos.criar(0).grafo();Map<String,Set<String>> antes=g.listaAdjacencia();List<Disciplina> ds=g.getDisciplinas();
             new ComparadorAlgoritmos().comparar(g);new DetectorCiclos().analisar(g);new PlanejadorPeriodos().planejar(g);
