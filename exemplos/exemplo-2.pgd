@@ -1,0 +1,10 @@
+PGD	1
+D	QQ==	QWxnb3JpdG1vcw==	1	140.0	130.0
+D	TQ==	TWF0ZW3DoXRpY2E=	1	140.0	340.0
+D	Qg==	RXN0cnV0dXJhcyBkZSBEYWRvcw==	2	400.0	130.0
+D	Qw==	QmFuY28gZGUgRGFkb3M=	2	400.0	340.0
+D	RA==	UHJvamV0byBJbnRlZ3JhZG9y	4	660.0	235.0
+R	QQ==	Qg==
+R	TQ==	Qw==
+R	Qg==	RA==
+R	Qw==	RA==

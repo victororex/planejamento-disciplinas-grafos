@@ -1,0 +1,53 @@
+Compilacao concluida.
+[OK] Cadastro válido e encapsulamento
+[OK] Nome vazio ou controle rejeitado
+[OK] Código e período inválidos rejeitados
+[OK] Código duplicado
+[OK] Dependência duplicada
+[OK] Autodependência
+[OK] Vértice inexistente rejeitado
+[OK] Aresta é direcionada e graus corretos
+[OK] Remoção limpa arestas incidentes
+[OK] Remoção de dependência
+[OK] Edição renomeia código e preserva relações e ordem
+[OK] Adjacência e consultas são imutáveis
+[OK] Grafo vazio
+[OK] Um vértice
+[OK] Isoladas
+[OK] DAG obrigatório e resultados determinísticos
+[OK] Múltiplas ordenações válidas
+[OK] Ciclo A → B → C → A
+[OK] Ciclo de duas disciplinas
+[OK] Kahn detecta ciclo com componente processável
+[OK] DFS detecta e reconstrói somente arestas existentes
+[OK] Ciclo versus disciplinas apenas bloqueadas
+[OK] Múltiplos ciclos e caminho cruzado na mesma componente forte
+[OK] Aresta para preto não é ciclo (diamante)
+[OK] Verificador rejeita inversão, falta, repetição e código desconhecido
+[OK] Planejamento do exemplo 1
+[OK] Planejamento considera o pré-requisito mais tardio
+[OK] Planejamento rejeita ciclos
+[OK] Várias componentes fracas e isolada
+[OK] Preservação do grafo em todas as análises
+[OK] Histórico Kahn reflete graus, fila e ordem reais
+[OK] Histórico DFS tem pilha, cores e finalização coerentes
+[OK] Histórico cíclico nunca entrega ordem final inválida
+[OK] Determinismo das duas estratégias
+[OK] Correção após remover dependência circular
+[OK] Geometria da seta termina na borda do cartão
+[OK] Posições inválidas rejeitadas
+[OK] Salvamento e reabertura preservam tudo
+[OK] Salvamento substitui arquivo existente
+[OK] Persistência de grafo vazio
+[OK] Arquivo inválido não modifica outro projeto
+[OK] Arquivo rejeita referência a vértice ausente
+[OK] Arquivo rejeita cadastro duplicado
+[OK] Arquivo rejeita Base64 e UTF-8 inválidos
+[OK] Arquivo rejeita posição não finita
+[OK] Arquivo rejeita aresta duplicada e autodependência
+[OK] Resultados, explicações e HTML protegem texto cadastrado
+[OK] 100 DAGs aleatórios: ambas ordens e todas as etapas respeitam cada aresta
+[OK] 40 grafos cíclicos aleatórios: classificação forte confere com alcançabilidade independente
+[OK] Cadeia de 10000 vértices sem estouro de pilha
+
+RESULTADO: 50 testes aprovados; 0 falhas.

@@ -1,7 +1,7 @@
-.tools/
-.tmp/
 out/
 dist/
+.tools/
+.tmp/
 *.class
 *.log
 *.tmp
