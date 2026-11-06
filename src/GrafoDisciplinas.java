@@ -3,6 +3,7 @@ import java.util.*;
 /** A -> B significa: A é pré-requisito de B. Sem coordenadas ou dependências de Swing. */
 public final class GrafoDisciplinas {
     private final Map<String, Disciplina> disciplinas = new LinkedHashMap<>();
+    private final Map<String, List<Requisito>> requisitos = new LinkedHashMap<>();
     private final Map<String, Set<String>> adjacencia = new LinkedHashMap<>();
 
     public void adicionarDisciplina(Disciplina d) {
@@ -27,12 +28,17 @@ public final class GrafoDisciplinas {
             for (String v : vizinhos) destinos.add(v.equals(anterior) ? nova.getCodigo() : v);
             adj.put(c.equals(anterior) ? nova.getCodigo() : c, destinos);
         });
+        Map<String,List<Requisito>> regras = new LinkedHashMap<>();
+        requisitos.forEach((c,rs) -> regras.put(c.equals(anterior)?nova.getCodigo():c, rs.stream().map(r -> r.renomear(anterior,nova.getCodigo())).toList()));
+        requisitos.clear(); requisitos.putAll(regras);
         disciplinas.clear(); disciplinas.putAll(ds);
         adjacencia.clear(); adjacencia.putAll(adj);
     }
 
     public void removerDisciplina(String codigo) {
         obterDisciplina(codigo);
+        requisitos.remove(codigo);
+        requisitos.replaceAll((c,rs) -> rs.stream().filter(r -> !r.referencias().contains(codigo)).toList());
         disciplinas.remove(codigo); adjacencia.remove(codigo);
         adjacencia.values().forEach(v -> v.remove(codigo));
     }
@@ -80,7 +86,31 @@ public final class GrafoDisciplinas {
         GrafoDisciplinas g = new GrafoDisciplinas();
         disciplinas.values().forEach(g::adicionarDisciplina);
         adjacencia.forEach((c, vs) -> vs.forEach(v -> g.adicionarDependencia(c, v)));
+        requisitos.forEach(g::definirRequisitos);
         return g;
+    }
+
+    public List<Requisito> requisitos(String codigo) { obterDisciplina(codigo); return requisitos.getOrDefault(codigo, List.of()); }
+    public void definirRequisitos(String codigo, List<Requisito> regras) {
+        obterDisciplina(codigo);
+        for (Requisito r : regras) for (String ref : r.referencias()) {
+            obterDisciplina(ref);
+            if (codigo.equals(ref)) throw new IllegalArgumentException("Uma disciplina não pode exigir ela mesma.");
+        }
+        requisitos.put(codigo,List.copyOf(regras));
+    }
+    /** Percurso iterativo das precedências; não altera a adjacência nem inclui correquisitos. */
+    public Set<String> alcance(String codigo, boolean anteriores) {
+        obterDisciplina(codigo);
+        Map<String,Set<String>> adj = listaAdjacencia();
+        if (anteriores) {
+            Map<String,Set<String>> reverso = new LinkedHashMap<>();
+            getCodigos().forEach(c -> reverso.put(c,new LinkedHashSet<>()));
+            adj.forEach((a,bs) -> bs.forEach(b -> reverso.get(b).add(a))); adj = reverso;
+        }
+        Set<String> vistos = new LinkedHashSet<>(); Deque<String> fila = new ArrayDeque<>(); fila.add(codigo);
+        while (!fila.isEmpty()) for (String v : adj.get(fila.remove())) if (vistos.add(v)) fila.add(v);
+        vistos.remove(codigo); return Collections.unmodifiableSet(vistos);
     }
 
     /** DFS da Aula 7 numa visão não direcionada: componentes FRACAMENTE conexas do dígrafo. */
