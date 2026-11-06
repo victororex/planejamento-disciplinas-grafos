@@ -1,3 +1,13 @@
+# Validação da evolução curricular
+
+A validação atual cobre 52 testes matemáticos originais, 41 testes curriculares e um fluxo gráfico real separado. Comandos: `bash testar.sh` e `xvfb-run -a java -cp out TestesInterface`, com JDK 21 e compilação `--release 17`. Veja a [saída atual](resultado-testes.txt), o [guia de estudo](GUIA-ESTUDO.md) e os [formatos de importação](IMPORTACAO.md).
+
+O fluxo gráfico cria matriz e disciplinas pelos formulários, altera o status acadêmico, cadastra correquisito, verifica busca sem alterar o grafo, valida/salva cenário, alterna visões, salva/reabre PGD 2 e executa Kahn/DFS. As capturas `capturas/matriz-curricular.png` e `capturas/planejamento-pessoal.png` vêm dessa execução com dados fictícios. Os arquivos temporários completos ficam em `.tmp/interface/`.
+
+Os quatro PGD 1 reais são testados com conferência exata de códigos, nomes, períodos e posições. Os novos testes incluem importação inválida preservando o projeto, correquisitos mútuos sem falso ciclo, AND/OR, limites, horas desconhecidas e matriz com 2000 disciplinas. Não foi feita validação no Windows nesta sessão; os registros abaixo documentam a versão original.
+
+---
+
 # Validação e roteiro de apresentação
 
 ## Ambiente e evidências

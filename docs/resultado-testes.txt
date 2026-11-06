@@ -1,4 +1,3 @@
-Compilacao concluida.
 [OK] Cadastro válido e encapsulamento
 [OK] Nome vazio ou controle rejeitado
 [OK] Código e período inválidos rejeitados
@@ -53,3 +52,46 @@ Compilacao concluida.
 [OK] Cadeia de 10000 vértices sem estouro de pilha
 
 RESULTADO: 52 testes aprovados; 0 falhas.
+[OK] Instituição, curso, versão, campus e projeto livre
+[OK] Múltiplas versões não compartilham modelo
+[OK] Horas, créditos, categorias personalizadas e campos desconhecidos
+[OK] Período desconhecido não é inventado
+[OK] Pré-requisito libera apenas sucessora imediata
+[OK] Reprovação não satisfaz pré-requisito
+[OK] Em andamento não é aprovada nem nova matrícula
+[OK] Dispensa satisfaz requisito de conclusão
+[OK] Todos os motivos de bloqueio são listados
+[OK] Correquisito precisa ser concluído ou simultâneo
+[OK] Correquisitos mútuos não criam ciclo topológico
+[OK] Exigência anterior não aceita simultaneidade
+[OK] Mínimos de horas e créditos consideram só conclusões
+[OK] Valores desconhecidos não satisfazem mínimos
+[OK] Alternativas OR e conjunção AND explícitas
+[OK] Árvore inválida e autorreferência são rejeitadas
+[OK] Dependências diretas, indiretas e ramificadas
+[OK] Alcance termina mesmo com ciclo
+[OK] Progresso inclui aproveitadas e não inclui andamento
+[OK] Simular aprovação não altera histórico nem período
+[OK] Limites de carga e quantidade
+[OK] Carga desconhecida impede afirmar limite satisfeito
+[OK] Sugestão respeita requisitos, limites e pares simultâneos
+[OK] Simultâneo bloqueado invalida o conjunto
+[OK] Renomear preserva regras e copiar mantém isolamento
+[OK] CSV com BOM, vírgula, ponto e vírgula, aspas e multiline
+[OK] CSV inválido relata duplicados e valores inválidos
+[OK] CSV campo desconhecido aparece na prévia
+[OK] JSON completo preserva disciplina e metadados
+[OK] JSON desconhecido e ciclos são mostrados antes de importar
+[OK] JSON referências inexistentes e duplicados são inválidos
+[OK] PGD 1 abre todos os exemplos reais e recupera posições
+[OK] PGD 2 persiste regras, status, posições, versão e cenários
+[OK] Exportação legada exige consentimento e não muda original
+[OK] Importação inválida não altera projeto já aberto
+[OK] Exportar e reimportar CSV e JSON
+[OK] PGD 2 corrompido é rejeitado
+[OK] Matriz com 2000 disciplinas e ramificação
+[OK] Exemplos fictícios preservam Kahn, DFS e ciclo real
+[OK] Modelos de importação e cinco catálogos fictícios são válidos
+[OK] Posições e dados reais de cada registro PGD 1 são exatos
+RESULTADO CURRICULAR: 41 testes aprovados; 0 falhas.
+INTERFACE OK: formulários de matriz e disciplinas, status, correquisito, filtros, quatro abas, cenário, PGD 2, importação inválida preservando projeto, Kahn/DFS e capturas reais.

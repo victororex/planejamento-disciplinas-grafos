@@ -1,43 +1,25 @@
 # Publicação e manutenção
 
-Repositório público: [victororex/planejamento-disciplinas-grafos](https://github.com/victororex/planejamento-disciplinas-grafos).
+Repositório: [victororex/planejamento-disciplinas-grafos](https://github.com/victororex/planejamento-disciplinas-grafos).
 
-Descrição: “Aplicação Java Swing para planejamento acadêmico utilizando grafos direcionados, ordenação topológica por Kahn e DFS e detecção de ciclos.”
+A evolução curricular é desenvolvida na branch `feat/planejador-curricular-universal`, criada após conferir que o HEAD inicial correspondia a `origin/main` (`12c8ed79b41060ebb459f9f7fcba08c9ab4e9681`). A licença MIT e os algoritmos manuais foram preservados. Não há force push ou descarte de contribuições.
 
-A criação foi feita na sessão autenticada do navegador, pois a integração disponível do GitHub não oferece criação de repositórios. O conteúdo e os commits são enviados pela integração autenticada. A visibilidade pública foi confirmada pela API do GitHub. Nenhum token ou senha foi colocado no projeto.
+A validação reproduzível é `bash testar.sh` (Linux/macOS) ou `testar.bat` (Windows), usando JDK 17 ou superior. O fluxo gráfico roda separadamente com `java -cp out TestesInterface` num desktop ou `xvfb-run -a java -cp out TestesInterface` no Linux.
 
-São publicados fontes, scripts, quatro exemplos, testes, documentação, capturas reais e licença MIT. A autoria da licença usa o nome e o login confirmados pelo perfil autenticado. PDFs da professora, JDK portátil, arquivos `.class`, `out/`, `dist/`, temporários e configurações pessoais da IDE são excluídos.
+São publicados fontes, testes, scripts, documentação, capturas reais, modelos e exemplos fictícios. JDK, pacotes de ferramentas, `.class`, `out/`, `dist/`, `.tmp/` e arquivos pessoais ficam fora do Git. O JAR é gerado localmente; não é necessário baixar dependências para executar o aplicativo.
 
-## Obter uma cópia
+## Revisão da evolução curricular
 
-```text
-git clone https://github.com/victororex/planejamento-disciplinas-grafos.git
-cd planejamento-disciplinas-grafos
+O acesso à API `api.github.com` retornou **Forbidden** na política de rede desta sessão. Isso impede criar o Pull Request e consultar regras de integração pela API. A autenticação HTTPS fornecida ao Git foi testada separadamente; uma falha da API não é tratada como ausência de token de Git. A branch deve ser revisada antes da integração à main.
+
+Após permitir acesso à API nas configurações do ambiente e verificar a autenticação da operação, o fluxo de PR pode ser concluído com:
+
+```bash
+gh pr create --base main --head feat/planejador-curricular-universal \
+  --title 'Evolui o aplicativo para planejador curricular universal' \
+  --body-file docs/PR-CURRICULAR.md
 ```
 
-No Windows, execute `executar.bat` após instalar o JDK 17 ou superior. Para validar: `testar.bat`.
+Também é possível iniciar a revisão pela [comparação de branches](https://github.com/victororex/planejamento-disciplinas-grafos/compare/main...feat/planejador-curricular-universal). A página de comparação não é um Pull Request criado. Confira o histórico e o resultado da publicação descritos na entrega da sessão.
 
-## Enviar alterações futuras
-
-Configure a identidade do Git com seus dados reais. Para evitar divulgar um endereço de email pessoal, use o endereço `noreply` que aparece nas suas configurações de email do GitHub. Não coloque credenciais nos comandos ou na URL do remoto.
-
-Exemplo de fluxo com o GitHub CLI já instalado:
-
-```text
-gh auth login
-git switch -c codex/melhoria-planejamento
-git add src docs README.md
-git diff --cached --check
-git commit -m "feat: descreve a melhoria implementada"
-git push -u origin codex/melhoria-planejamento
-gh pr create --base main
-```
-
-Use `git status` antes do commit. Para confirmar o remoto e sua branch principal:
-
-```text
-git remote -v
-git ls-remote --heads origin main
-```
-
-A pasta local da entrega acompanha a branch pública `main` em uma branch de trabalho com prefixo `codex/`. A publicação inicial não depende de criar um pull request: o repositório foi criado especificamente para este projeto.
+Não são necessários tokens em arquivos de configuração do projeto. Nunca grave credenciais no código ou nas URLs dos remotos. Para futuras mudanças, preserve o histórico, use uma branch e execute as verificações antes de integrar.

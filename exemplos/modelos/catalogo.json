@@ -1,0 +1,34 @@
+{
+  "versao": 2,
+  "matriz": {
+    "instituicao": "Instituição fictícia",
+    "curso": "Curso de exemplo — dados fictícios",
+    "codigoCurso": "",
+    "versao": "Modelo didático 1",
+    "ano": null,
+    "campus": "",
+    "turno": "",
+    "periodos": 4,
+    "observacoes": "Exemplo editável; não é uma matriz oficial.",
+    "fonte": ""
+  },
+  "disciplinas": [
+    {"codigo": "P1", "nome": "Programação I", "periodo": 1, "horas": 60, "creditos": 4, "categoria": "Obrigatória", "status": "NAO_CURSADA"},
+    {"codigo": "P2", "nome": "Programação II", "periodo": 2, "horas": 60, "creditos": 4, "categoria": "Obrigatória", "status": "NAO_CURSADA"},
+    {"codigo": "LAB", "nome": "Laboratório", "periodo": 2, "horas": 30, "creditos": 2, "categoria": "Obrigatória"},
+    {"codigo": "ATIV", "nome": "Atividades complementares", "periodo": null, "horas": null, "creditos": null, "categoria": "Atividade complementar"},
+    {"codigo": "PROJ", "nome": "Projeto final", "periodo": 4, "horas": null, "creditos": null, "categoria": "Trabalho de conclusão"}
+  ],
+  "prerequisitos": [["P1", "P2"]],
+  "requisitos": {
+    "P2": [{"tipo": "CORREQUISITO", "codigo": "LAB"}],
+    "LAB": [{"tipo": "CORREQUISITO", "codigo": "P2"}],
+    "PROJ": [{"tipo": "AND", "itens": [
+      {"tipo": "OR", "itens": [{"tipo": "CONCLUIDA", "codigo": "P2"}, {"tipo": "CONCLUIDA", "codigo": "LAB"}]},
+      {"tipo": "HORAS", "minimo": 60},
+      {"tipo": "CREDITOS", "minimo": 4},
+      {"tipo": "ATIVIDADE", "codigo": "ATIV"}
+    ]}]
+  },
+  "planos": []
+}

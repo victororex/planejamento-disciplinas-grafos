@@ -1,0 +1,5 @@
+codigo,nome,periodo,horas,creditos,categoria,status,descricao,observacoes,oferta
+PROG1,Programação I,1,60,4,Obrigatória,APROVADA,Exemplo fictício,,
+PROG2,Programação II,2,60,4,Obrigatória,NAO_CURSADA,Exemplo fictício,,
+LAB,Laboratório,2,30,2,Obrigatória,NAO_CURSADA,Exemplo fictício,,
+ATIV,Atividades complementares,,,,Atividade complementar,NAO_CURSADA,Valores não informados,,

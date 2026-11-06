@@ -1,4 +1,17 @@
-# Formato de projeto PGD 1
+# Formatos de projeto PGD 2 e PGD 1
+
+
+## PGD 2 — formato atual
+
+Novos salvamentos usam `PGD<TAB>2` na primeira linha, seguido de um objeto JSON versão 2 em UTF-8. Quebras LF e CRLF são aceitas após o cabeçalho. O esquema é exatamente o [catálogo documentado em IMPORTACAO.md](IMPORTACAO.md): matriz, disciplinas, posições, pré-requisitos, regras adicionais e cenários pessoais.
+
+A escrita sempre inclui todas as posições e todos os dados cadastrados. Os resultados transitórios dos algoritmos continuam sendo recalculados. Não há objetos serializados ou conteúdo executável. Limite total de 8 MiB. Diferentemente da importação de catálogo JSON com prévia, PGD 2 rejeita campos desconhecidos para evitar que a abertura e o salvamento silenciosamente descartem dados de uma versão futura.
+
+A leitura de PGD 1 permanece disponível. Abra qualquer um dos quatro exemplos antigos em `exemplos/exemplo-N.pgd`; nomes, códigos, relações e posições são recuperados. Metadados ficam vazios, horas/créditos não informados e status inicia como Não cursada. Salvar passa a produzir PGD 2; para conservar o arquivo legado, escolha outro nome. A interface confirma antes de sobrescrever.
+
+**Exportar PGD 1 (legado)** é uma operação separada. A tela avisa que metadados, horas, créditos, categorias, status, descrições, correquisitos, regras e cenários serão perdidos na cópia exportada. Se houver disciplina sem período informado, a exportação legada é recusada: nenhum período é inventado. A API também exige consentimento explícito (`aceitarPerda=true`). Prefira JSON ou PGD 2 para preservar tudo.
+
+## PGD 1 — leitura compatível e exportação explícita
 
 Arquivo textual UTF-8, extensão `.pgd`, com campos separados por TAB (`\t`) e uma linha por registro. A leitura aceita quebras LF e CRLF. A escrita usa as quebras da plataforma. A primeira linha é obrigatoriamente:
 
@@ -39,7 +52,7 @@ O registro `R QQ== Qg==` representa A → B. Os dois códigos devem existir. Are
 
 ## Ordem e validação
 
-A escrita preserva ordem de cadastro, depois ordem de origens e seus sucessores. A leitura aceita relações antes de cadastros, validando todas as referências após ler os registros. Não aceita linhas vazias, comentários, registros desconhecidos, campos extras ou versões diferentes.
+A escrita legada preserva ordem de cadastro, depois ordem de origens e seus sucessores. A leitura aceita relações antes de cadastros, validando todas as referências após ler os registros. O leitor legado não aceita linhas vazias, comentários, registros desconhecidos, campos extras ou versões diferentes.
 
 Limites de leitura: 8 MiB por arquivo, 2000 disciplinas, 20000 relações e 4096 caracteres por linha. Textos Base64 e UTF-8 são validados. Erros de cadastro ou relações informam o número da linha; erros do sistema de arquivos ou codificação são comunicados pela interface. O projeto é construído em memória separada e só substitui o atual se toda a validação passar.
 

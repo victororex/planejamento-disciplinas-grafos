@@ -1,6 +1,6 @@
-# Planejamento Inteligente para o Gerenciamento da Oferta de Disciplinas
+# Planejamento Inteligente — Planejador Curricular Universal
 
-Aplicação acadêmica em **Java 17 e Swing**, sem dependências externas, para construir grafos direcionados de pré-requisitos, estudar Kahn e DFS passo a passo e planejar disciplinas que podem ser cursadas simultaneamente.
+Aplicação local em **Java 17 e Swing**, sem dependências externas, para criar, importar, editar e acompanhar matrizes curriculares de qualquer instituição ou curso. Projetos livres continuam disponíveis. Não requer servidor, banco de dados ou internet. Kahn, DFS e o modo de estudo permanecem implementados manualmente.
 
 A interface utiliza **tema escuro por padrão**, com a mesma paleta no grafo, nos formulários, seletores de arquivo, tabelas, planejamento e explicações. Os estados dos algoritmos preservam seus indicadores e destaques de seleção e ciclo.
 
@@ -8,7 +8,54 @@ A interface utiliza **tema escuro por padrão**, com a mesma paleta no grafo, no
 
 Repositório público: [victororex/planejamento-disciplinas-grafos](https://github.com/victororex/planejamento-disciplinas-grafos).
 
-## Capturas reais
+## Evolução curricular
+
+- Cadastro de instituição, curso, versão, ano, campus, turno, duração, observações e fonte; um projeto/arquivo por matriz, com opção de abrir várias janelas.
+- Disciplinas com período oficial opcional, horas, créditos, categoria personalizável, descrição, oferta e status acadêmico.
+- Pré-requisitos, correquisitos simultâneos e regras explícitas AND/OR, mínimos de horas/créditos e conclusão de atividades.
+- Visões de grafo, matriz curricular por períodos, planejamento pessoal e acompanhamento do aluno, compartilhando o mesmo modelo.
+- Busca (Ctrl+F), filtros de período/categoria/status, foco em dependências diretas/indiretas, legenda, relações tracejadas, ocultação e reorganização visual.
+- Disponibilidade com motivos de bloqueio, progresso por disciplinas e totais conhecidos de horas/créditos. Reprovação e andamento não equivalem a aprovação.
+- Cenários com disciplinas selecionadas, período futuro, limites, aprovações hipotéticas, sugestão de combinações válidas e comparação.
+- Leitura dos arquivos antigos **PGD 1**, salvamento completo **PGD 2** e importação/exportação **CSV/JSON**, com pré-visualização e confirmação.
+- Cinco exemplos curriculares **fictícios**, genéricos e editáveis, além dos quatro grafos originais.
+
+Comece no menu **Matriz e arquivos → Identificar matriz**, adicione disciplinas e use **Requisitos e correquisitos** para condições adicionais. **Ver disciplinas disponíveis** fica na aba Acompanhamento e no menu. Nas abas curriculares, o painel de algoritmos recolhe para liberar espaço; volte a Grafo para estudar Kahn e DFS.
+
+O período oficial nunca é reescrito para acomodar uma simulação. Campos acadêmicos desconhecidos ficam vazios. A elegibilidade considera somente os dados cadastrados: não garante matrícula, oferta, vagas ou ausência de conflitos de horário. A sugestão de disciplinas é uma heurística gulosa, não uma solução ótima.
+
+Consulte o [guia de estudo para iniciantes](docs/GUIA-ESTUDO.md), os [modelos e formatos de importação](docs/IMPORTACAO.md) e a [compatibilidade PGD 1/2](docs/FORMATO-PGD.md). Dados opcionais ficam em [exemplos/curriculares](exemplos/curriculares) e modelos em [exemplos/modelos](exemplos/modelos).
+
+## Executar no Linux ou macOS
+
+Requer um JDK 17 ou posterior no PATH:
+
+```bash
+bash compilar.sh
+java -Dfile.encoding=UTF-8 -jar dist/planejamento-disciplinas.jar
+bash testar.sh
+```
+
+Para abrir um projeto legado: `java -jar dist/planejamento-disciplinas.jar exemplos/exemplo-1.pgd`.
+
+Os testes automatizados funcionam sem ambiente gráfico. Para a interface, é necessário desktop com suporte a Java Swing. Em Linux sem desktop, Xvfb permite executar o teste gráfico sem criar um servidor web:
+
+```bash
+xvfb-run -a java -Dfile.encoding=UTF-8 -cp out TestesInterface
+```
+
+A compilação usa `--release 17`, mesmo quando o JDK instalado é mais recente. No ambiente em nuvem preparado nesta sessão, as ferramentas locais ficam em `/workspace/.setup/tools`; antes dos comandos, configure `JAVA_HOME=/workspace/.setup/tools/usr/lib/jvm/java-21-openjdk-amd64` e inclua `$JAVA_HOME/bin` e `/workspace/.setup/tools/usr/bin` no PATH.
+
+## Capturas da evolução curricular
+
+Capturas reais do teste gráfico Swing no Linux, com dados fictícios:
+
+![Matriz por períodos com status e dependências](docs/capturas/matriz-curricular.png)
+
+![Cenários de planejamento pessoal](docs/capturas/planejamento-pessoal.png)
+
+
+## Capturas da interface de grafos original
 
 Interface Swing executada no Windows durante a validação. As imagens não são mockups.
 
@@ -105,7 +152,7 @@ O modelo considera apenas dependências, sem limite de disciplinas simultâneas,
 
 ### Salvar e abrir
 
-**Salvar projeto** (`Ctrl+S`) grava `.pgd`; **Abrir projeto** (`Ctrl+O`) valida e recupera disciplinas, relações e posições. Um arquivo inválido não substitui o projeto atual. Há confirmação antes de sobrescrever um arquivo ou descartar alterações. O [formato textual PGD 1](docs/FORMATO-PGD.md) usa UTF-8 e Base64 para os textos, sem bibliotecas externas. Resultados de execução não são persistidos.
+**Salvar projeto** (`Ctrl+S`) grava `.pgd`; **Abrir projeto** (`Ctrl+O`) valida e recupera disciplinas, relações e posições. Um arquivo inválido não substitui o projeto atual. Há confirmação antes de sobrescrever um arquivo ou descartar alterações. O [formato PGD 2](docs/FORMATO-PGD.md) salva metadados, status, requisitos e cenários em UTF-8. O leitor PGD 1 com Base64 continua compatível. Resultados transitórios dos algoritmos não são persistidos.
 
 ## Exemplos editáveis
 
@@ -173,7 +220,9 @@ Guardar T fotografias completas custa O(T·V), além dos textos. Histórico, ren
 
 ## Testes e relatório
 
-Foram executados **52 testes, com 0 falhas**, no JDK Temurin 17.0.20.1. A suíte inclui os 20 tópicos obrigatórios, os exemplos K4 e K3 com vértice isolado da Aula 7, entradas inválidas, edição de códigos, classificação de múltiplos ciclos, imutabilidade dos estados, geometria das extremidades, 100 DAGs aleatórios, 40 grafos com conferência independente por alcançabilidade e uma cadeia de 10000 vértices. São 52 casos nomeados; as amostras aleatórias são verificações internas, não 140 casos extras na contagem.
+Na evolução curricular foram executados **93 testes automatizados, com 0 falhas**: 52 originais e 41 curriculares, no OpenJDK 21.0.13, compilados para Java 17. O teste gráfico separado também passou, exercitando formulários reais, status, correquisito, filtros, cenários, PGD 2 e Kahn/DFS. A saída completa atual está em [resultado-testes.txt](docs/resultado-testes.txt).
+
+A suíte matemática original conserva seus **52 casos** (anteriormente validados no JDK Temurin 17.0.20.1). A suíte inclui os 20 tópicos obrigatórios, os exemplos K4 e K3 com vértice isolado da Aula 7, entradas inválidas, edição de códigos, classificação de múltiplos ciclos, imutabilidade dos estados, geometria das extremidades, 100 DAGs aleatórios, 40 grafos com conferência independente por alcançabilidade e uma cadeia de 10000 vértices. São 52 casos nomeados; as amostras aleatórias são verificações internas, não 140 casos extras na contagem.
 
 Consulte a [saída real](docs/resultado-testes.txt), as [evidências e o roteiro da interface](docs/VALIDACAO.md), o [relatório acadêmico](docs/RELATORIO.md) e as [instruções de publicação](docs/PUBLICACAO.md).
 
@@ -188,4 +237,4 @@ Materiais da professora **Silvia Brandão** lidos e conferidos diretamente nos P
 
 A [conferência dos requisitos](docs/CONFERENCIA-PDFS.md) relaciona cada tópico à implementação. Os PDFs e seus dados de contato não são redistribuídos no repositório.
 
-Código sob a [licença MIT](LICENSE). A identificação da licença foi obtida do perfil autenticado do GitHub. Nenhum nome, RA ou identificação de aluno foi acrescentado ao relatório acadêmico.
+Código sob a [licença MIT](LICENSE). Nenhum nome, RA ou identificação de aluno foi acrescentado ao relatório acadêmico.
